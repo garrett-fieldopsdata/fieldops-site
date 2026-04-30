@@ -1,0 +1,1037 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#1a1a1a" />
+<title>Field Ops Data — A CRM for the crew that does the work.</title>
+<meta name="description" content="Field Ops Data is the CRM built for field-ops solo operators and small crews. Contacts, jobs, photos of finished work, offline-ready. Free during beta." />
+<meta property="og:title" content="Field Ops Data — A CRM for the crew that does the work." />
+<meta property="og:description" content="Contacts, jobs, photos of finished work, offline-ready. Built for 1099 hands, solo consultants, and two-truck crews." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://fieldopsdata.com" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231a1a1a' rx='16'/%3E%3Ctext x='50' y='66' font-family='Arial Black' font-size='48' font-weight='900' text-anchor='middle' fill='%23f97316'%3EF%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --fod-navy: #1a1a1a;
+    --fod-navy-2: #111111;
+    --fod-navy-3: #2a2a2a;
+    --fod-amber: #f97316;
+    --fod-amber-hot: #fb923c;
+    --fod-bone: #f5f4f0;
+    --fod-bg: #f5f4f0;
+    --fod-white: #FFFFFF;
+    --fod-ink: #1a1a1a;
+    --fod-ink-2: #374151;
+    --fod-muted: #6b7280;
+    --fod-muted-2: #9ca3af;
+    --fod-border: #e5e7eb;
+    --fod-border-dk: rgba(255,255,255,0.12);
+    --fod-red: #dc2626;
+    --fod-green: #16a34a;
+    --fod-blue: #3b82f6;
+    --fod-purple: #7c3aed;
+    --fod-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
+    --fod-shadow-lg: 0 24px 48px -16px rgba(0,0,0,0.24), 0 8px 16px -8px rgba(0,0,0,0.12);
+    --fod-radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Barlow', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    color: var(--fod-ink);
+    background: var(--fod-white);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    line-height: 1.55;
+  }
+  a { color: inherit; text-decoration: none; }
+  img, svg { display: block; max-width: 100%; }
+  button { font: inherit; cursor: pointer; border: 0; background: transparent; color: inherit; }
+
+  /* ---------- Announcement ---------- */
+  .announce {
+    background: var(--fod-navy);
+    color: var(--fod-bone);
+    text-align: center;
+    font-size: 13px;
+    padding: 10px 16px;
+    letter-spacing: 0.01em;
+  }
+  .announce strong { color: var(--fod-amber); font-weight: 700; }
+
+  /* ---------- Header ---------- */
+  .site {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: saturate(1.2) blur(10px);
+    border-bottom: 1px solid var(--fod-border);
+  }
+  .hdr {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 800; font-size: 18px; letter-spacing: -0.01em;
+  }
+  .brand-mark {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: var(--fod-navy);
+    display: grid; place-items: center;
+    color: var(--fod-amber); font-weight: 900; font-size: 18px;
+  }
+  nav.nav a {
+    color: var(--fod-ink-2); font-weight: 500; font-size: 14px;
+    padding: 8px 14px; border-radius: 8px;
+    transition: background 0.15s, color 0.15s;
+  }
+  nav.nav a:hover { background: var(--fod-bg); color: var(--fod-ink); }
+  nav.nav { display: flex; gap: 4px; }
+  .hdr-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--fod-navy); color: #fff;
+    padding: 10px 18px; border-radius: 9px;
+    font-weight: 600; font-size: 14px;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .hdr-cta:hover { background: var(--fod-navy-3); transform: translateY(-1px); }
+  @media (max-width: 820px) { nav.nav { display: none; } }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 80px 0 96px;
+    position: relative;
+    overflow: hidden;
+    background: #f5f4f0;
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(249,115,22,0.12); color: #c2410c;
+    font-size: 13px; font-weight: 700;
+    padding: 6px 12px; border-radius: 999px;
+    letter-spacing: 0.01em;
+  }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--fod-amber); box-shadow: 0 0 0 4px rgba(249,115,22,0.2); }
+  h1.h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(44px, 6vw, 72px);
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    font-weight: 900;
+    margin: 20px 0 24px;
+    color: var(--fod-navy);
+  }
+  h1.h1 .accent { color: var(--fod-amber); }
+  .lede {
+    font-size: 19px;
+    color: var(--fod-ink-2);
+    max-width: 540px;
+    margin-bottom: 32px;
+  }
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .cta-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--fod-amber); color: #fff;
+    padding: 16px 28px; border-radius: 10px;
+    font-weight: 700; font-size: 16px;
+    box-shadow: 0 10px 24px -8px rgba(249,115,22,0.45);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .cta-primary:hover { transform: translateY(-1px); box-shadow: 0 14px 28px -8px rgba(249,115,22,0.6); }
+  .cta-secondary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: transparent; color: var(--fod-navy);
+    padding: 16px 24px; border-radius: 10px;
+    font-weight: 600; font-size: 16px;
+    border: 1.5px solid var(--fod-border);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .cta-secondary:hover { border-color: var(--fod-ink-2); background: var(--fod-bg); }
+  .trust-row {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    margin-top: 36px; font-size: 13.5px; color: var(--fod-muted);
+  }
+  .trust-row span { display: inline-flex; align-items: center; gap: 6px; }
+  .trust-row svg { width: 16px; height: 16px; color: var(--fod-green); }
+
+  /* Hero app mockup */
+  .hero-mockup {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    max-width: 520px;
+    justify-self: end;
+  }
+  .mock-card {
+    position: absolute;
+    background: var(--fod-white);
+    border-radius: 14px;
+    box-shadow: var(--fod-shadow-lg);
+    border: 1px solid var(--fod-border);
+    overflow: hidden;
+  }
+  .mock-main {
+    top: 0; left: 0; right: 10%; bottom: 12%;
+    z-index: 2;
+  }
+  .mock-app-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 14px;
+    background: var(--fod-navy);
+    color: #fff;
+  }
+  .mock-app-header .dots { display: flex; gap: 5px; }
+  .mock-app-header .dots span { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+  .mock-app-header .title { font-size: 12px; color: rgba(255,255,255,0.85); font-weight: 600; margin-left: auto; letter-spacing: 0.02em; }
+  .mock-kanban {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    padding: 14px; background: var(--fod-bg);
+  }
+  .mock-col { display: flex; flex-direction: column; gap: 6px; }
+  .mock-col-h {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 10px; font-weight: 700; color: var(--fod-ink-2);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 4px 6px 6px;
+  }
+  .mock-col-h span.c { background: var(--fod-border); color: var(--fod-ink-2); padding: 1px 6px; border-radius: 10px; font-size: 9px; }
+  .mock-col[data-s="lead"] .mock-col-h span.d { color: var(--fod-muted-2); }
+  .mock-col[data-s="quoted"] .mock-col-h span.d { color: var(--fod-blue); }
+  .mock-col[data-s="active"] .mock-col-h span.d { color: #f97316; }
+  .mock-col[data-s="paid"] .mock-col-h span.d { color: #16a34a; }
+  .mock-job {
+    background: var(--fod-white);
+    border-radius: 8px;
+    padding: 8px 10px;
+    border: 1px solid var(--fod-border);
+    box-shadow: 0 1px 2px rgba(16,24,40,0.04);
+  }
+  .mock-job .t { font-size: 10px; font-weight: 600; color: var(--fod-ink); line-height: 1.2; }
+  .mock-job .c { font-size: 9px; color: var(--fod-muted); margin-top: 2px; }
+  .mock-job .m { font-size: 10px; font-weight: 700; margin-top: 4px; color: var(--fod-green); }
+  .mock-side {
+    bottom: 0; right: 0; width: 58%; height: 48%;
+    z-index: 3;
+    transform: translate(0, 8%);
+  }
+  .mock-photos {
+    padding: 14px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+  }
+  .mock-photos .ph {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #5B7FA8 0%, #37506D 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .mock-photos .ph::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), transparent 50%);
+  }
+  .mock-photos .ph:nth-child(2) { background: linear-gradient(135deg, #7A5D3A, #4A3A24); }
+  .mock-photos .ph:nth-child(3) { background: linear-gradient(135deg, #8A6F52, #5A4938); }
+  .mock-photos .ph:nth-child(4) { background: linear-gradient(135deg, #4A6B8C, #2D4A6A); }
+  .mock-photos .ph:nth-child(5) { background: linear-gradient(135deg, #A87A45, #6E4E2E); }
+  .mock-photos .ph:nth-child(6) { background: linear-gradient(135deg, #546D88, #344A65); }
+  .mock-side-head {
+    padding: 12px 14px;
+    background: var(--fod-white);
+    border-bottom: 1px solid var(--fod-border);
+  }
+  .mock-side-head .t { font-size: 12px; font-weight: 700; }
+  .mock-side-head .s { font-size: 10px; color: var(--fod-muted); margin-top: 2px; }
+
+  .mock-kpi {
+    top: -16px; right: -6%;
+    padding: 14px 18px;
+    z-index: 4;
+    background: var(--fod-white);
+    border-radius: 12px;
+    min-width: 180px;
+  }
+  .mock-kpi .lbl { font-size: 11px; color: var(--fod-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+  .mock-kpi .val { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 900; color: #f97316; margin-top: 2px; }
+  .mock-kpi .chg { font-size: 11px; color: var(--fod-green); font-weight: 600; margin-top: 2px; }
+
+  @media (max-width: 880px) {
+    .hero { padding: 48px 0 72px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+    .hero-mockup { max-width: 100%; justify-self: center; aspect-ratio: 5/4; }
+    .mock-kpi { display: none; }
+  }
+
+  /* ---------- Logos strip ---------- */
+  .strip {
+    background: var(--fod-bg);
+    padding: 28px 0;
+    border-top: 1px solid var(--fod-border);
+    border-bottom: 1px solid var(--fod-border);
+  }
+  .strip-inner {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; flex-wrap: wrap;
+    font-size: 13px; color: var(--fod-muted);
+  }
+  .strip-inner span.for { font-weight: 600; color: var(--fod-ink-2); }
+  .strip-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .strip-chips .chip {
+    background: var(--fod-white); border: 1px solid var(--fod-border);
+    padding: 6px 14px; border-radius: 999px;
+    font-size: 13px; color: var(--fod-ink-2); font-weight: 500;
+  }
+
+  /* ---------- Sections ---------- */
+  section { padding: 96px 0; }
+  .section-head { text-align: center; max-width: 680px; margin: 0 auto 56px; }
+  .section-head .tag {
+    font-size: 13px; font-weight: 700; color: var(--fod-amber);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .section-head h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-weight: 900;
+    color: var(--fod-navy);
+    margin-bottom: 16px;
+  }
+  .section-head p {
+    font-size: 17px; color: var(--fod-ink-2);
+  }
+
+  /* ---------- Problem ---------- */
+  .problem { background: var(--fod-navy); color: var(--fod-bone); }
+  .problem .section-head h2 { color: var(--fod-white); }
+  .problem .section-head p { color: rgba(247,244,236,0.8); }
+  .pain-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  .pain {
+    background: var(--fod-navy-2);
+    border: 1px solid var(--fod-border-dk);
+    border-radius: var(--fod-radius);
+    padding: 28px;
+  }
+  .pain .nope { font-size: 14px; color: #FFA8A8; font-weight: 600; margin-bottom: 10px; letter-spacing: 0.01em; }
+  .pain .nope::before { content: '✕ '; color: var(--fod-red); }
+  .pain h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px; font-weight: 900; color: var(--fod-white);
+    margin-bottom: 10px;
+  }
+  .pain p { font-size: 15px; color: rgba(247,244,236,0.78); }
+  @media (max-width: 820px) { .pain-grid { grid-template-columns: 1fr; } }
+
+  /* ---------- Features ---------- */
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .feat {
+    background: var(--fod-white);
+    border: 1px solid var(--fod-border);
+    border-radius: var(--fod-radius);
+    padding: 32px;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+  .feat:hover { transform: translateY(-2px); box-shadow: var(--fod-shadow-lg); border-color: var(--fod-amber); }
+  .feat-icon {
+    width: 48px; height: 48px; border-radius: 10px;
+    background: var(--fod-navy); color: var(--fod-amber);
+    display: grid; place-items: center;
+    margin-bottom: 18px;
+  }
+  .feat-icon svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2; fill: none; }
+  .feat h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 900; color: var(--fod-navy); margin-bottom: 8px; }
+  .feat p { font-size: 15px; color: var(--fod-ink-2); }
+  @media (max-width: 900px) { .features-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .features-grid { grid-template-columns: 1fr; } }
+
+  /* ---------- Big feature: photos ---------- */
+  .big-feat { background: var(--fod-bg); }
+  .big-feat-grid {
+    display: grid; grid-template-columns: 1fr 1.1fr; gap: 72px; align-items: center;
+  }
+  .big-feat h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-weight: 900;
+    color: var(--fod-navy);
+    margin-bottom: 18px;
+  }
+  .big-feat .tag {
+    font-size: 13px; font-weight: 700; color: var(--fod-amber);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 14px; display: block;
+  }
+  .big-feat p { font-size: 17px; color: var(--fod-ink-2); margin-bottom: 18px; }
+  .big-feat ul { list-style: none; margin-top: 24px; }
+  .big-feat li {
+    display: flex; gap: 12px; padding: 10px 0;
+    font-size: 15.5px; color: var(--fod-ink-2);
+  }
+  .big-feat li svg {
+    flex: 0 0 auto; width: 22px; height: 22px;
+    color: var(--fod-green); stroke: currentColor; stroke-width: 2.5; fill: none; margin-top: 2px;
+  }
+  .photo-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    padding: 22px; background: var(--fod-white);
+    border-radius: var(--fod-radius); box-shadow: var(--fod-shadow-lg);
+    border: 1px solid var(--fod-border);
+  }
+  .photo-grid .ph {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    position: relative; overflow: hidden;
+  }
+  .photo-grid .ph::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.35));
+  }
+  .photo-grid .ph span.lbl {
+    position: absolute; bottom: 8px; left: 10px;
+    color: #fff; font-size: 11px; font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    z-index: 2;
+  }
+  .ph-1 { background: linear-gradient(135deg, #516C8C, #2D4A6A); }
+  .ph-2 { background: linear-gradient(135deg, #8A6F52, #5A4938); }
+  .ph-3 { background: linear-gradient(135deg, #4A6B8C, #2A4565); }
+  .ph-4 { background: linear-gradient(135deg, #7A5D3A, #4A3A24); }
+  .ph-5 { background: linear-gradient(135deg, #6B8299, #3E5873); }
+  .ph-6 { background: linear-gradient(135deg, #A87A45, #6E4E2E); }
+  .ph-7 { background: linear-gradient(135deg, #546D88, #344A65); }
+  .ph-8 { background: linear-gradient(135deg, #8F7250, #5C4A32); }
+  .ph-9 { background: linear-gradient(135deg, #4F6580, #2F4560); }
+  @media (max-width: 880px) { .big-feat-grid { grid-template-columns: 1fr; gap: 48px; } }
+
+  /* ---------- Workflow ---------- */
+  .workflow {
+    max-width: 980px; margin: 0 auto;
+  }
+  .steps {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    position: relative;
+  }
+  .step {
+    position: relative;
+    padding: 28px 22px;
+    background: var(--fod-white);
+    border: 1px solid var(--fod-border);
+    border-radius: var(--fod-radius);
+  }
+  .step .n {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--fod-amber); color: var(--fod-navy);
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 15px;
+    margin-bottom: 14px;
+  }
+  .step h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 900; color: var(--fod-navy); margin-bottom: 6px; }
+  .step p { font-size: 14.5px; color: var(--fod-ink-2); }
+  @media (max-width: 820px) { .steps { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+
+  /* ---------- Pricing ---------- */
+  .pricing { background: var(--fod-navy); color: var(--fod-bone); }
+  .pricing .section-head h2 { color: var(--fod-white); }
+  .pricing .section-head p { color: rgba(247,244,236,0.85); }
+  .plans {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;
+    max-width: 1080px; margin: 0 auto;
+  }
+  .plan {
+    background: var(--fod-navy-2);
+    border: 1px solid var(--fod-border-dk);
+    border-radius: var(--fod-radius);
+    padding: 36px;
+  }
+  .plan.featured {
+    background: #fff; color: var(--fod-ink);
+    border-color: var(--fod-amber);
+    box-shadow: 0 24px 48px -12px rgba(244,168,54,0.35);
+    position: relative;
+  }
+  .plan .badge {
+    position: absolute; top: -12px; right: 24px;
+    background: var(--fod-amber); color: #fff;
+    font-size: 12px; font-weight: 700;
+    padding: 5px 11px; border-radius: 999px;
+    letter-spacing: 0.03em;
+  }
+  .plan h3 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .plan .sub { font-size: 14px; opacity: 0.75; margin-bottom: 20px; }
+  .plan.featured .sub { color: var(--fod-muted); opacity: 1; }
+  .plan .price { font-size: 48px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+  .plan .price-sub { font-size: 14px; margin-top: 6px; opacity: 0.75; }
+  .plan.featured .price-sub { color: var(--fod-muted); opacity: 1; }
+  .plan .note { font-size: 13px; margin-top: 10px; padding: 8px 12px; background: rgba(244,168,54,0.15); color: var(--fod-amber); border-radius: 8px; font-weight: 600; display: inline-block; }
+  .plan.featured .note { background: rgba(249,115,22,0.1); color: #c2410c; }
+  .plan ul { list-style: none; margin: 24px 0; padding: 0; }
+  .plan li {
+    display: flex; gap: 10px; padding: 8px 0;
+    font-size: 14.5px;
+  }
+  .plan li svg { flex: 0 0 auto; width: 18px; height: 18px; color: var(--fod-amber); stroke: currentColor; stroke-width: 2.5; fill: none; margin-top: 3px; }
+  .plan.featured li svg { color: var(--fod-green); }
+  .plan .cta-plan {
+    display: block; width: 100%; text-align: center;
+    padding: 14px 18px; border-radius: 9px;
+    font-weight: 700; font-size: 15px;
+    margin-top: 16px;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .plan:not(.featured) .cta-plan {
+    background: transparent; color: #fff; border: 1.5px solid var(--fod-border-dk);
+  }
+  .plan:not(.featured) .cta-plan:hover { background: var(--fod-navy-3); border-color: transparent; }
+  .plan.featured .cta-plan {
+    background: var(--fod-amber); color: #fff;
+    box-shadow: 0 8px 18px -6px rgba(249,115,22,0.45);
+  }
+  .plan.featured .cta-plan:hover { transform: translateY(-1px); }
+  @media (max-width: 900px) { .plans { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 580px) { .plans { grid-template-columns: 1fr; } }
+
+  /* ---------- Waitlist / launch ---------- */
+  .waitlist { background: var(--fod-bone); padding: 80px 0; }
+  .waitlist-box {
+    max-width: 640px; margin: 0 auto;
+    text-align: center;
+  }
+  .waitlist-box h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-weight: 900;
+    color: var(--fod-navy);
+    margin-bottom: 16px;
+  }
+  .waitlist-box p {
+    font-size: 17px; color: var(--fod-ink-2);
+    margin-bottom: 28px;
+  }
+  .waitlist-form {
+    display: flex; gap: 10px; max-width: 460px; margin: 0 auto;
+    background: #fff; border: 1px solid var(--fod-border);
+    border-radius: 10px; padding: 6px;
+    box-shadow: var(--fod-shadow);
+  }
+  .waitlist-form input {
+    flex: 1; border: 0; padding: 12px 14px; font: inherit;
+    background: transparent; outline: none;
+    font-size: 15px;
+  }
+  .waitlist-form button {
+    background: var(--fod-amber); color: #fff;
+    border-radius: 7px; padding: 12px 20px;
+    font-weight: 700; font-size: 15px;
+    transition: background 0.15s;
+  }
+  .waitlist-form button:hover { background: #ea6c10; }
+  .waitlist small { display: block; margin-top: 14px; color: var(--fod-muted); font-size: 13px; }
+
+  /* ---------- FAQ ---------- */
+  .faq-list { max-width: 780px; margin: 0 auto; }
+  details.faq-item {
+    border-bottom: 1px solid var(--fod-border);
+    padding: 0;
+  }
+  details.faq-item summary {
+    list-style: none;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 20px;
+    font-weight: 700; font-size: 17px;
+    padding: 22px 0;
+    color: var(--fod-navy);
+    cursor: pointer;
+  }
+  details.faq-item summary::-webkit-details-marker { display: none; }
+  details.faq-item summary::after {
+    content: '+';
+    font-size: 26px; font-weight: 300;
+    color: var(--fod-muted);
+    transition: transform 0.2s;
+    width: 24px; text-align: center;
+  }
+  details.faq-item[open] summary::after { content: '−'; color: var(--fod-amber); }
+  details.faq-item .ans {
+    font-size: 15.5px; color: var(--fod-ink-2);
+    padding: 0 0 22px; max-width: 640px;
+  }
+
+  /* ---------- Final CTA ---------- */
+  .final {
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+    color: var(--fod-bone);
+    text-align: center;
+    padding: 96px 0;
+    position: relative; overflow: hidden;
+  }
+  .final::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(249,115,22,0.15) 0%, transparent 60%);
+  }
+  .final-inner { position: relative; z-index: 1; }
+  .final h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    font-weight: 900;
+    color: var(--fod-white);
+    margin-bottom: 18px;
+  }
+  .final h2 .accent { color: var(--fod-amber); }
+  .final p { font-size: 18px; color: rgba(247,244,236,0.85); margin-bottom: 32px; max-width: 560px; margin-left: auto; margin-right: auto; }
+  .final .cta-primary { background: var(--fod-amber); color: var(--fod-navy); }
+
+  /* ---------- Footer ---------- */
+  footer.site-foot {
+    background: var(--fod-navy);
+    color: rgba(247,244,236,0.7);
+    padding: 56px 0 28px;
+    font-size: 14px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .foot-grid {
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px;
+    margin-bottom: 48px;
+  }
+  .foot-brand .brand-mark { background: var(--fod-amber); color: var(--fod-navy); }
+  .foot-brand .brand { color: var(--fod-white); }
+  .foot-brand p { margin-top: 14px; max-width: 300px; line-height: 1.55; }
+  .foot-col h4 { color: var(--fod-white); font-size: 14px; margin-bottom: 14px; font-weight: 700; }
+  .foot-col a { display: block; padding: 4px 0; color: rgba(247,244,236,0.7); }
+  .foot-col a:hover { color: var(--fod-amber); }
+  .foot-bar {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 22px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    font-size: 13px;
+    color: rgba(247,244,236,0.55);
+  }
+  @media (max-width: 780px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 500px) { .foot-grid { grid-template-columns: 1fr; } .foot-bar { flex-direction: column; align-items: flex-start; } }
+</style>
+</head>
+<body>
+
+<div class="announce">
+  Now live in beta — <strong>free during beta</strong>. <a href="https://app.fieldopsdata.com" style="color:var(--fod-amber);text-decoration:underline;font-weight:700;">Create your account →</a>
+</div>
+
+<header>
+  <div class="site hdr">
+    <a href="#" class="brand">
+      <span class="brand-mark">F</span>
+      <span>Field Ops Data</span>
+    </a>
+    <nav class="nav">
+      <a href="#features">Features</a>
+      <a href="#photos">Job photos</a>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <a href="https://app.fieldopsdata.com" style="color:var(--fod-ink-2);font-weight:600;font-size:14px;padding:10px 16px;border-radius:9px;border:1.5px solid var(--fod-border);transition:border-color .15s,background .15s;" onmouseover="this.style.borderColor='var(--fod-ink-2)'" onmouseout="this.style.borderColor='var(--fod-border)'">Log in</a>
+      <a href="https://app.fieldopsdata.com" class="hdr-cta">Create account →</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="site hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span> Now live · Free during beta</span>
+      <h1 class="h1">A CRM for the crew that <span class="accent">does the work.</span></h1>
+      <p class="lede">Contacts, jobs, a pipeline you can drag, and photos of finished work that actually stay with the job. Built for solo hands, 1099 consultants, and two-truck crews — not Fortune 500 sales teams.</p>
+      <div class="cta-row">
+        <a href="https://app.fieldopsdata.com" class="cta-primary">Open the app — free</a>
+        <a href="#features" class="cta-secondary">See features</a>
+      </div>
+      <div class="trust-row">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Works offline</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Free during beta</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your data stays yours</span>
+      </div>
+    </div>
+
+    <div class="hero-mockup" aria-hidden="true">
+      <div class="mock-card mock-main">
+        <div class="mock-app-header">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="title">PIPELINE · $47,820</div>
+        </div>
+        <div class="mock-kanban">
+          <div class="mock-col" data-s="lead">
+            <div class="mock-col-h"><span>LEAD <span class="d">●</span></span><span class="c">3</span></div>
+            <div class="mock-job"><div class="t">Coiled tubing — Reeves</div><div class="c">Reeves Operating</div><div class="m" style="color:var(--fod-muted-2)">$8,400</div></div>
+            <div class="mock-job"><div class="t">MWD re-run</div><div class="c">Hartman Drilling</div></div>
+            <div class="mock-job"><div class="t">2 truck hot shot</div><div class="c">Permian Logistics</div></div>
+          </div>
+          <div class="mock-col" data-s="quoted">
+            <div class="mock-col-h"><span>QUOTED <span class="d">●</span></span><span class="c">2</span></div>
+            <div class="mock-job"><div class="t">Welding — manifold</div><div class="c">Silver Eagle</div><div class="m" style="color:var(--fod-blue)">$4,200</div></div>
+            <div class="mock-job"><div class="t">Flowback 72hr</div><div class="c">Apex Operating</div></div>
+          </div>
+          <div class="mock-col" data-s="active">
+            <div class="mock-col-h"><span>ACTIVE <span class="d">●</span></span><span class="c">2</span></div>
+            <div class="mock-job"><div class="t">Workover — Rig 14</div><div class="c">Crescent Energy</div><div class="m">$12,800</div></div>
+            <div class="mock-job"><div class="t">Cementing sub</div><div class="c">Reeves Operating</div></div>
+          </div>
+          <div class="mock-col" data-s="paid">
+            <div class="mock-col-h"><span>PAID <span class="d">●</span></span><span class="c">4</span></div>
+            <div class="mock-job"><div class="t">Frac assist — 9 day</div><div class="c">Pioneer</div><div class="m">$22,420</div></div>
+            <div class="mock-job"><div class="t">Wireline run</div><div class="c">Apex</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-card mock-side">
+        <div class="mock-side-head">
+          <div class="t">Workover — Rig 14</div>
+          <div class="s">Crescent Energy · 6 photos · Active</div>
+        </div>
+        <div class="mock-photos">
+          <div class="ph"></div><div class="ph"></div><div class="ph"></div>
+          <div class="ph"></div><div class="ph"></div><div class="ph"></div>
+        </div>
+      </div>
+
+      <div class="mock-card mock-kpi">
+        <div class="lbl">THIS MONTH</div>
+        <div class="val">$47,820</div>
+        <div class="chg">↑ 23% vs last mo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="site strip-inner">
+    <span class="for">Built for:</span>
+    <div class="strip-chips">
+      <span class="chip">1099 welders</span>
+      <span class="chip">MWD hands</span>
+      <span class="chip">Coil/frac consultants</span>
+      <span class="chip">Hot shot owner-ops</span>
+      <span class="chip">Roustabout crews</span>
+      <span class="chip">Wireline sub-contractors</span>
+    </div>
+  </div>
+</div>
+
+<section class="problem">
+  <div class="site">
+    <div class="section-head">
+      <div class="tag" style="color:var(--fod-amber)">The problem</div>
+      <h2>Most CRMs weren't built for you.</h2>
+      <p>You don't need forecast dashboards and deal-stage automation. You need to remember who called on Tuesday, what you quoted, and where the pictures of the last job went.</p>
+    </div>
+    <div class="pain-grid">
+      <div class="pain">
+        <div class="nope">Salesforce · Pipedrive · HubSpot</div>
+        <h3>Built for sales teams with managers.</h3>
+        <p>Setup takes a weekend. Monthly bill costs a day's work. Ten fields you'll never fill in.</p>
+      </div>
+      <div class="pain">
+        <div class="nope">Notion · Airtable · Google Sheets</div>
+        <h3>Flexible — but you have to build it.</h3>
+        <p>Great if you love configuring tools. Most hands want to work, not fiddle with formulas at 9 PM.</p>
+      </div>
+      <div class="pain">
+        <div class="nope">A notebook + group text + camera roll</div>
+        <h3>Honest, but leaky.</h3>
+        <p>Photos live in iCloud. Quotes in text threads. Who owes you what? Good question — go scroll for an hour.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="site">
+    <div class="section-head">
+      <div class="tag">What's inside</div>
+      <h2>Six things. Done well.</h2>
+      <p>Everything a solo field-ops business needs to stay on top of the work. Nothing you'll never open.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Contacts</h3>
+        <p>Operators, crews, and vendors in one place. Tags for who pays fast and who doesn't. Linked to every job they own.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 2v4"/><path d="M16 2v4"/></svg></div>
+        <h3>Jobs</h3>
+        <p>Every bid, quote, and active job — with revenue, cost, crew hours, and margin. Never underquote the same job twice.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="18" rx="1"/><rect x="11" y="3" width="6" height="14" rx="1"/><rect x="19" y="3" width="2" height="10" rx="1"/></svg></div>
+        <h3>Pipeline</h3>
+        <p>Lead → Quoted → Won → Active → Invoiced → Paid. Drag cards between stages. See your month's total at a glance.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <h3>Job photos</h3>
+        <p>Upload photos of finished work. Stored right on your device. Before/after. Punch-list proof. Pull them up on the next sales call.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <h3>Tasks</h3>
+        <p>Call backs, permit filings, follow-ups on unpaid invoices. Linked to the job or contact that spawned them.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+        <h3>Works offline</h3>
+        <p>Patch. Rig. Lease road. Yellowknife. The app runs in your browser — no signal required. Your data's saved locally.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="big-feat" id="photos">
+  <div class="site big-feat-grid">
+    <div>
+      <span class="tag">Job photos</span>
+      <h2>Photos of finished work — attached to the job.</h2>
+      <p>No more scrolling six weeks of camera roll looking for the Reeves stack shot. Upload photos straight to the job. They're compressed, organized, and ready to send when a customer wants proof or a reference.</p>
+      <ul>
+        <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Multi-upload directly from your phone or camera</li>
+        <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Auto-compressed (full resolution optional, but who needs a 12MB file on the rig?)</li>
+        <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Click to expand. Works on phone, tablet, laptop</li>
+        <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Stored locally — no monthly storage bill, no data leaving your device</li>
+      </ul>
+    </div>
+    <div class="photo-grid" aria-hidden="true">
+      <div class="ph ph-1"><span class="lbl">Stack · Reeves</span></div>
+      <div class="ph ph-2"><span class="lbl">Weld pass</span></div>
+      <div class="ph ph-3"><span class="lbl">Manifold done</span></div>
+      <div class="ph ph-4"><span class="lbl">Flow iron</span></div>
+      <div class="ph ph-5"><span class="lbl">Rig up</span></div>
+      <div class="ph ph-6"><span class="lbl">Coil on ground</span></div>
+      <div class="ph ph-7"><span class="lbl">BOP stack</span></div>
+      <div class="ph ph-8"><span class="lbl">Post-job site</span></div>
+      <div class="ph ph-9"><span class="lbl">Truck load out</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="site">
+    <div class="section-head">
+      <div class="tag">How it works</div>
+      <h2>From lead to paid — four steps.</h2>
+      <p>A full loop around a job takes 60 seconds of tracking. Here's what it looks like.</p>
+    </div>
+    <div class="workflow">
+      <div class="steps">
+        <div class="step">
+          <div class="n">1</div>
+          <h3>Log the lead</h3>
+          <p>Hit <kbd>n</kbd> — name the job, pick the customer. Stage: Lead.</p>
+        </div>
+        <div class="step">
+          <div class="n">2</div>
+          <h3>Quote + drag</h3>
+          <p>Drop your quote amount. Drag the card to Quoted. Follow up on the auto-task.</p>
+        </div>
+        <div class="step">
+          <div class="n">3</div>
+          <h3>Run the job</h3>
+          <p>Drag to Active. Upload photos from the field. Log cost + hours.</p>
+        </div>
+        <div class="step">
+          <div class="n">4</div>
+          <h3>Invoice → Paid</h3>
+          <p>Send the invoice (from the RigStarter template). Drag to Paid when the ACH hits.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" class="pricing">
+  <div class="site">
+    <div class="section-head">
+      <div class="tag" style="color:var(--fod-amber)">Pricing</div>
+      <h2>Simple pricing. No per-seat games.</h2>
+      <p>Every plan covers your whole business — not per user. Beta users keep free access forever. Paid plans launch with v1.</p>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <h3>Solo</h3>
+        <div class="sub">For operators who run their own book.</div>
+        <div class="price">$49</div>
+        <div class="price-sub">per month · beta users free forever · 14-day trial</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Unlimited contacts, jobs, tasks</li>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Full pipeline + drag/drop</li>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Professional invoicing (branded PDF)</li>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Job photos (device storage)</li>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Export / import backups</li>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Offline-ready</li>
+        </ul>
+        <a href="https://app.fieldopsdata.com" class="cta-plan">Open the app →</a>
+      </div>
+
+      <div class="plan featured">
+        <span class="badge">MOST POPULAR</span>
+        <h3>Pro <span style="font-size:12px; font-weight:600; color:var(--fod-amber); letter-spacing:0.04em; margin-left:6px;">(soon)</span></h3>
+        <div class="sub">For small crews who need sync + cloud photos.</div>
+        <div class="price">$99</div>
+        <div class="price-sub">per month · per business · up to 5 users</div>
+        <div class="note">Bundle buyers: 50% off first year.</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Everything in Solo</li>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Cloud photos (unlimited)</li>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Multi-device sync</li>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Up to 5 crew members</li>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Role-based permissions</li>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Customer photo portal</li>
+        </ul>
+        <a href="#waitlist" class="cta-plan">Join the waitlist →</a>
+      </div>
+
+      <div class="plan">
+        <h3>Crew <span style="font-size:12px; font-weight:600; color:var(--fod-amber); letter-spacing:0.04em; margin-left:6px;">(soon)</span></h3>
+        <div class="sub">For growing operations running multiple rigs or trucks.</div>
+        <div class="price">$199</div>
+        <div class="price-sub">per month · per business · unlimited users</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Everything in Pro</li>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Unlimited crew members</li>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Customer portal (photos + invoices)</li>
+          <li><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Priority support</li>
+        </ul>
+        <a href="#waitlist" class="cta-plan">Join the waitlist →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="waitlist" id="waitlist">
+  <div class="site">
+    <div class="waitlist-box">
+      <h2>Get notified when v1 ships.</h2>
+      <p>We'll email when Crew opens up, when major features drop, and nothing else. No firehose.</p>
+      <form class="waitlist-form" action="https://embeds.beehiiv.com/YOUR_PUBLICATION_ID/subscribe" method="post" target="_blank">
+        <input type="email" name="email" placeholder="you@yourbusiness.com" required />
+        <button type="submit">Notify me</button>
+      </form>
+      <small>Unsubscribe any time. We share your email with exactly nobody.</small>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="site">
+    <div class="section-head">
+      <div class="tag">FAQ</div>
+      <h2>Honest answers.</h2>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Is my data in the cloud?</summary>
+        <div class="ans">Your data syncs to secure cloud storage tied to your account, so it's available on any device you log into. You can also export a local JSON backup anytime from Settings.</div>
+      </details>
+      <details class="faq-item">
+        <summary>What if I switch phones or clear my browser?</summary>
+        <div class="ans">Export a backup first (Settings → Export). The file contains all your contacts, jobs, tasks, and photos as a single JSON. On the new device, click Import and you're back in business. We recommend exporting weekly — takes 2 seconds.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Does it work offline? Really?</summary>
+        <div class="ans">Yep. Open the app once with signal, then you can run the whole thing from a pad on no-service lease road. Your changes stay local. Next time you're online, export a backup so it's safe.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Do I need an account?</summary>
+        <div class="ans">Yes — a free account keeps your data synced across devices and backed up to the cloud. Sign up takes 60 seconds and requires an access code during beta.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Can I import from a spreadsheet?</summary>
+        <div class="ans">V1.1 — spreadsheet import is on the roadmap. For now, adding a few dozen contacts takes about 10 minutes. If you're coming from the RigStarter Bundle's Job Tracker, we'll ship a direct importer first.</div>
+      </details>
+      <details class="faq-item">
+        <summary>How is this different from RigStarter?</summary>
+        <div class="ans">RigStarter is the spreadsheet system — invoices, estimates, job tracker. Perfect when you're running 1–3 jobs a month. Field Ops Data is what you graduate to when the spreadsheet can't keep up and you want a real pipeline + photo storage. Bundle buyers get first access.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Mobile app?</summary>
+        <div class="ans">The site works great on mobile — add it to your home screen (Safari → Share → Add to Home Screen, Chrome → Menu → Install app) and it runs like a native app. Native iOS/Android apps on the Crew roadmap.</div>
+      </details>
+      <details class="faq-item">
+        <summary>What if it breaks?</summary>
+        <div class="ans">Email support@fieldopsdata.com. During beta I reply personally — usually within an hour during daylight. Bug reports get fixed fast. Feature requests go on the roadmap.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="site final-inner">
+    <h2>The CRM that fits <span class="accent">the work you actually do.</span></h2>
+    <p>Open it in a browser. Add a contact. Log a job. Upload a photo. That's it — you're running a real pipeline.</p>
+    <a href="https://app.fieldopsdata.com" class="cta-primary">Open the app — free during beta</a>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="site">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#" class="brand">
+          <span class="brand-mark">F</span>
+          <span>Field Ops Data</span>
+        </a>
+        <p>Built in the patch, for the patch. A product of Field Ops Data LLC.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Product</h4>
+        <a href="#features">Features</a>
+        <a href="#photos">Job photos</a>
+        <a href="#pricing">Pricing</a>
+        <a href="https://app.fieldopsdata.com">Open the app</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="https://rigstarter.com">RigStarter Bundle</a>
+        <a href="mailto:hello@fieldopsdata.com">hello@fieldopsdata.com</a>
+        <a href="mailto:support@fieldopsdata.com">support@fieldopsdata.com</a>
+      </div>
+      <div class="foot-col">
+        <h4>Resources</h4>
+        <a href="#faq">FAQ</a>
+        <a href="#waitlist">Newsletter</a>
+        <a href="#">Roadmap</a>
+      </div>
+    </div>
+    <div class="foot-bar">
+      <div>© 2026 Field Ops Data LLC. All rights reserved.</div>
+      <div>Made for the crew that does the work.</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
